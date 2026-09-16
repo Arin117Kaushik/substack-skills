@@ -9,7 +9,7 @@
     python publish.py delete-post ID
     python publish.py delete-note ID
 
-Credentials come from the environment or the first .env found in: current folder, ~/.substack-skills/, bundle root:
+Credentials come from the environment or ~/.substack-skills/.env (create it with `publish.py setup`):
 COOKIES_STRING or COOKIES_PATH (always), plus PUBLICATION_URL for posts. Notes only need a Substack profile.
 Never pass credentials on the command line.
 Prints one JSON object. Exit code 1 on any failure, with cookie values redacted.
@@ -27,7 +27,7 @@ from pathlib import Path
 SUBSTACK_API = "https://substack.com/api/v1"
 PAYWALL = "<!-- paywall -->"
 AUDIENCES = ("everyone", "only_paid", "founding", "only_free")
-BUNDLE_ROOT = Path(__file__).resolve().parents[3]
+SKILL_DIR = Path(__file__).resolve().parents[1]
 USER_DIR = Path.home() / ".substack-skills"
 ENV_FILE = USER_DIR / ".env"
 LOADED_ENV = None  # which .env file load_env() used, reported by check
@@ -36,18 +36,16 @@ _INLINE = re.compile(r"\*\*(.+?)\*\*|\*(.+?)\*|\[([^\]]+)\]\(([^)\s]+)\)")
 
 def load_env() -> None:
     """Minimal .env reader so the bundle needs no python-dotenv. Real env vars win."""
+    # One fixed location, so a copied skill never picks up some other project's .env.
     global LOADED_ENV
-    for folder in (Path.cwd(), USER_DIR, BUNDLE_ROOT):
-        path = folder / ".env"
-        if not path.is_file():
-            continue
-        LOADED_ENV = str(path)
-        # utf-8-sig: Notepad can save a BOM that would otherwise glue itself to the first key
-        for line in path.read_text(encoding="utf-8-sig").splitlines():
-            key, sep, value = line.partition("=")
-            if sep and key.strip() and not key.lstrip().startswith("#"):
-                os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
+    if not ENV_FILE.is_file():
         return
+    LOADED_ENV = str(ENV_FILE)
+    # utf-8-sig: Notepad can save a BOM that would otherwise glue itself to the first key
+    for line in ENV_FILE.read_text(encoding="utf-8-sig").splitlines():
+        key, sep, value = line.partition("=")
+        if sep and key.strip() and not key.lstrip().startswith("#"):
+            os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
 
 
 def inline_nodes(text: str) -> list[dict]:
@@ -150,7 +148,7 @@ def cmd_setup(args) -> dict:
     (USER_DIR / "outbox").mkdir(exist_ok=True)
     created = not ENV_FILE.exists()
     if created:
-        ENV_FILE.write_text((BUNDLE_ROOT / ".env.example").read_text(encoding="utf-8"), encoding="utf-8")
+        ENV_FILE.write_text((SKILL_DIR / ".env.example").read_text(encoding="utf-8"), encoding="utf-8")
     return {"action": "setup", "env_file": str(ENV_FILE), "created": created, "next_steps": [
         f"Open {ENV_FILE} in a text editor.",
         "In your browser, sign in at substack.com, press F12, open the Application tab, "

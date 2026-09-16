@@ -9,7 +9,7 @@ Draft a post from what the user actually has, then package every field Substack 
 
 ## Before drafting
 
-1. Read `../../references/voice-rules.md`, `../../references/anti-fabrication.md`, `../../references/platform-limits.md`.
+1. Read `references/voice-rules.md`, `references/anti-fabrication.md`, `references/platform-limits.md`.
 2. Read `~/.substack-skills/voice-profile.md` and `~/.substack-skills/story-bank.md` if they exist.
 
 ## Draft

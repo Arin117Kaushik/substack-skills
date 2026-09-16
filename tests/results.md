@@ -21,3 +21,16 @@ Each scenario from `scenarios.md` rerun in a fresh agent (Sonnet) told to read t
 
 - Agents still use dashes in their own chat explanations (not in drafted copy). The voice rules govern copy only.
 - `publish.py` was run against a real account: Notes verified live, posts not yet. See `live-test.md`.
+
+## Portability (2026-09-17)
+
+Skills installed with `scripts/install.py` into a throwaway project's `.agents/skills`, outside the repo.
+
+| Check | Result |
+|---|---|
+| Codex CLI 0.145 (`codex exec`, read-only) | Listed all 11 `substack-*` skills |
+| Antigravity CLI (`agy -p --add-dir <project>`) | Listed all 11. Without `--add-dir` it listed none: the CLI reads project skills only from workspace folders |
+| OpenClaw 2026.9.3 (`openclaw skills list`) | Reads `~/.agents/skills` (source `agents-skills-personal`). Its project skills come from its own agent workspace, not the current folder |
+| humanizer scenario run from the copied folder | PASS: read only `references/` inside the copied skill folder, all seeded tells flagged, figures kept, nothing invented |
+| `publish.py check` from the copied folder | PASS against the maintainer's account, credentials read from `~/.substack-skills/.env` |
+

@@ -9,7 +9,7 @@ Get the raw material every writer skill needs, one question at a time, and keep 
 
 ## Where answers go
 
-`~/.substack-skills/story-bank.md`. If it doesn't exist, copy `../../references/story-bank.template.md` there before saving anything. Every writer skill in the bundle reads it.
+`~/.substack-skills/story-bank.md`. If it doesn't exist, copy `references/story-bank.template.md` there before saving anything. Every writer skill in the bundle reads it.
 
 ## Modes
 
@@ -36,7 +36,7 @@ If the Story Bank exists, read it first, say which sections are thin, and start 
 
 ## What goes in the bank
 
-Only things the user said, dated, in their words. No summaries that add meaning, no inferred feelings (see `../../references/anti-fabrication.md`). Anything they flag as private goes under "Off limits".
+Only things the user said, dated, in their words. No summaries that add meaning, no inferred feelings (see `references/anti-fabrication.md`). Anything they flag as private goes under "Off limits".
 
 ## Ending
 

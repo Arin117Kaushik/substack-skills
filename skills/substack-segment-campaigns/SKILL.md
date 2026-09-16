@@ -10,7 +10,7 @@ Turn a subscriber export into segments the user builds in Substack, plus copy th
 ## Two facts that decide everything
 
 1. **Notes are public.** A Note can't reach a segment, and anything written "to lapsed readers" in a Note tells the whole feed they left. Never write a Note for a segment campaign.
-2. **The export is private data** about people who never agreed to be discussed. Follow `../../references/untrusted-content.md` section 2.
+2. **The export is private data** about people who never agreed to be discussed. Follow `references/untrusted-content.md` section 2.
 
 ## What you output
 
@@ -30,7 +30,7 @@ Counts and date ranges only. No email addresses, no names, no list of people, ev
 - **Dashboard direct email:** Subscribers tab, filter, select, Send email (no post created in the archive).
 - **Welcome email:** Settings, for new or imported subscribers.
 
-**3. The copy** for that channel: subject line, preview text, body. Follow `../../references/voice-rules.md` and `../../references/anti-fabrication.md`. No invented discounts, offers or reasons people left. If an offer would help, put a slot: `[your offer, if any]`.
+**3. The copy** for that channel: subject line, preview text, body. Follow `references/voice-rules.md` and `references/anti-fabrication.md`. No invented discounts, offers or reasons people left. If an offer would help, put a slot: `[your offer, if any]`.
 
 **4. Tags to add** (optional): tag names and the filter rule for each, applied inside Substack.
 

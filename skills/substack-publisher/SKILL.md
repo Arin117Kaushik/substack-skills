@@ -42,7 +42,7 @@ If you don't know whether a post should email subscribers, ask. Don't default.
 
 ## Commands
 
-Write the approved text to `~/.substack-skills/outbox/<date>-<slug>.md`. Run `publish.py` by its full path inside this skill's base directory, with `python` on Windows or `python3` on macOS and Linux:
+Write the approved text to `~/.substack-skills/outbox/<date>-<slug>.md`. Run `publish.py` by its full path in this skill's folder (the folder this SKILL.md is in), with `python` on Windows or `python3` on macOS and Linux:
 
 | Action | Command |
 |---|---|

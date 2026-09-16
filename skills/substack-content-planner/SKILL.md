@@ -9,7 +9,7 @@ Plan Notes and posts the user can actually produce, per section, and get them sc
 
 ## Before planning
 
-Read `../../references/platform-limits.md`, `../../references/notes-taxonomy.md`, and `~/.substack-skills/voice-profile.md` and `~/.substack-skills/story-bank.md` if they exist.
+Read `references/platform-limits.md`, `references/notes-taxonomy.md`, and `~/.substack-skills/voice-profile.md` and `~/.substack-skills/story-bank.md` if they exist.
 
 Always return the calendar. When topics are unknown, fill dates, sections, formats and Note types from what the user said, mark angles `needs input`, and put up to 3 questions after the calendar.
 

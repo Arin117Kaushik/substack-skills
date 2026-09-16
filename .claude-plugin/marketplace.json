@@ -12,7 +12,7 @@
       "name": "substack-skills",
       "source": "./",
       "description": "11 Substack skills: Notes, posts with SEO packaging, repurposing, humanizer, interviewer, reply drafts, segment campaigns, profile audits, analytics recaps, content planning, and an approval-gated publisher.",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "author": {
         "name": "Arin Kaushik",
         "url": "https://github.com/Arin117Kaushik"

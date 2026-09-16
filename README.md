@@ -1,6 +1,6 @@
 # substack-skills
 
-11 Claude Code skills for writing on Substack: Notes, posts packaged for SEO, repurposing, a humanizer, an interviewer that builds your Story Bank, reply drafts, segment campaigns, About page audits, analytics recaps, content planning, and a publisher that posts and schedules only after you approve.
+11 agent skills for writing on Substack, for Claude Code, Codex, Google Antigravity, OpenClaw, and any agent that reads SKILL.md folders: Notes, posts packaged for SEO, repurposing, a humanizer, an interviewer that builds your Story Bank, reply drafts, segment campaigns, About page audits, analytics recaps, content planning, and a publisher that posts and schedules only after you approve.
 
 Every writing skill runs on two rules: nothing goes in a draft that you didn't say, and nothing goes out without your yes.
 
@@ -86,7 +86,9 @@ New Substack, live today.
 
 ## Install
 
-In Claude Code:
+Every skill works right away with no setup, except the publisher ([setup below](#publisher-setup-optional)).
+
+### Claude Code
 
 ```
 /plugin marketplace add https://github.com/Arin117Kaushik/substack-skills.git
@@ -95,7 +97,29 @@ In Claude Code:
 
 Use the full HTTPS URL: the short `owner/repo` form clones over SSH and fails if you haven't set up GitHub SSH keys.
 
-Every skill except the publisher works right away with no setup.
+### Codex, OpenClaw, Antigravity, and other agents
+
+Clone once, then copy the skills into your agent's skills folder with the installer (Python 3, no dependencies):
+
+```
+git clone https://github.com/Arin117Kaushik/substack-skills.git
+cd substack-skills
+python scripts/install.py codex
+```
+
+| Agent | Command | Installs into | Notes |
+|---|---|---|---|
+| [Codex](https://learn.chatgpt.com/docs/build-skills) | `python scripts/install.py codex` | `~/.agents/skills` | Start a new Codex session. |
+| [OpenClaw](https://docs.openclaw.ai/tools/skills) | `python scripts/install.py openclaw` | `~/.agents/skills` | Same folder as Codex, so one install covers both. Check with `openclaw skills list`. |
+| [Google Antigravity](https://antigravity.google/docs/skills/) | `python scripts/install.py antigravity` | `~/.gemini/config/skills` | Global. For one project, use the project line below and open that folder as the workspace (CLI: `agy --add-dir <folder>`). |
+| One project only (any of the above) | `python scripts/install.py path/to/project/.agents/skills` | that folder | Read by Codex and Antigravity when the project is open. |
+| Any other agent that reads SKILL.md folders | `python scripts/install.py path/to/its/skills` | that folder | |
+
+Use `python3` on macOS and Linux. To update: `git pull`, then run the same command again. It only replaces folders named `substack-*` and never touches your files in `~/.substack-skills`.
+
+Each skill folder is self-contained (its shared rules are copied into its own `references/`), so you can also copy single skill folders by hand.
+
+Verified on 2026-09-17: Codex CLI 0.145 and Antigravity CLI listed all 11 skills from `.agents/skills`, and OpenClaw 2026.9.3 reads `~/.agents/skills`.
 
 ## Your files
 
@@ -111,14 +135,17 @@ Skills keep your data in `~/.substack-skills/`, outside the plugin folder (updat
 ## Publisher setup (optional)
 
 1. `pip install python-substack==0.7.0` (`pip3` on macOS and Linux)
-2. Ask Claude to "set up my Substack publisher". It runs `publish.py setup`, which creates `~/.substack-skills/.env` with instructions inside. Open that file and paste in your `substack.sid` cookie yourself (sign in at substack.com, F12, Application tab, Storage > Cookies > https://substack.com). Notes need only that; posts also need `PUBLICATION_URL`. Don't paste cookies into a chat.
-3. Make every publish ask you first, whatever tries to run it. Add to `~/.claude/settings.json`:
+2. Ask your agent to "set up my Substack publisher". It runs `publish.py setup`, which creates `~/.substack-skills/.env` with instructions inside. Open that file and paste in your `substack.sid` cookie yourself (sign in at substack.com, F12, Application tab, Storage > Cookies > https://substack.com). Notes need only that; posts also need `PUBLICATION_URL`. Don't paste cookies into a chat.
+3. Make every publish ask you first, whatever tries to run it.
+   - **Claude Code:** add to `~/.claude/settings.json`:
 
-   ```json
-   { "permissions": { "ask": ["Bash(*publish.py *)", "PowerShell(*publish.py *)"] } }
-   ```
+     ```json
+     { "permissions": { "ask": ["Bash(*publish.py *)", "PowerShell(*publish.py *)"] } }
+     ```
 
-4. Ask Claude to "check my Substack publisher setup". It runs `publish.py check`, which reads your profile and reports whether Notes and posts are ready.
+   - **Other agents:** keep command approval switched on, and don't run the publisher in a mode that auto-approves shell commands. The skill also stops at an approval card before every publish.
+
+4. Ask your agent to "check my Substack publisher setup". It runs `publish.py check`, which reads your profile and reports whether Notes and posts are ready.
 
 What it can do: publish a post now (with or without emailing subscribers), schedule a post, publish a Note (optionally with a link card), delete a post or Note. Every post runs Substack's own prepublish check first.
 
@@ -140,7 +167,8 @@ Each skill was written test-first: a scenario ran in a fresh agent without the s
 
 ```
 python scripts/check_skills.py           # structure, references, credential isolation
-python -m unittest discover -s tests     # publish.py, offline
+python -m unittest discover -s tests     # publish.py and the installer, offline
+python scripts/check_skills.py --fix     # after editing references/, recopy them into the skills
 ```
 
 ## Credits

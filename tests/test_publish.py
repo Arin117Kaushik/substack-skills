@@ -68,21 +68,30 @@ class Safety(unittest.TestCase):
             self.assertTrue(Path(d, "outbox").is_dir())
 
     def test_env_with_notepad_bom_still_loads(self):
-        with tempfile.TemporaryDirectory() as d, mock.patch.dict(os.environ, {}):
+        with tempfile.TemporaryDirectory() as d, mock.patch.dict(os.environ, {}), \
+                mock.patch.object(publish, "ENV_FILE", Path(d, ".env")):
             os.environ.pop("PUBLICATION_URL", None)
             Path(d, ".env").write_bytes("﻿PUBLICATION_URL=https://bom.substack.com\r\n".encode("utf-8"))
-            with mock.patch.object(publish.Path, "cwd", return_value=Path(d)):
-                publish.load_env()
+            publish.load_env()
             self.assertEqual(os.environ.get("PUBLICATION_URL"), "https://bom.substack.com")
 
     def test_env_file_never_overrides_real_env(self):
-        with tempfile.TemporaryDirectory() as d, mock.patch.dict(os.environ, {"PUBLICATION_URL": "https://real.substack.com"}):
+        with tempfile.TemporaryDirectory() as d, \
+                mock.patch.dict(os.environ, {"PUBLICATION_URL": "https://real.substack.com"}), \
+                mock.patch.object(publish, "ENV_FILE", Path(d, ".env")):
             Path(d, ".env").write_text("PUBLICATION_URL=https://file.substack.com\nCOOKIES_PATH=c.json\n")
-            with mock.patch.object(publish.Path, "cwd", return_value=Path(d)):
-                publish.load_env()
+            publish.load_env()
             self.assertEqual(os.environ["PUBLICATION_URL"], "https://real.substack.com")
             self.assertEqual(os.environ["COOKIES_PATH"], "c.json")
-            os.environ.pop("COOKIES_PATH")
+
+    def test_env_in_current_folder_is_ignored(self):
+        with tempfile.TemporaryDirectory() as d, mock.patch.dict(os.environ, {}), \
+                mock.patch.object(publish, "ENV_FILE", Path(d, "missing", ".env")), \
+                mock.patch.object(publish.Path, "cwd", return_value=Path(d)):
+            os.environ.pop("COOKIES_STRING", None)
+            Path(d, ".env").write_text("COOKIES_STRING=substack.sid=someone-elses\n")
+            publish.load_env()
+            self.assertNotIn("COOKIES_STRING", os.environ)
 
     def test_schedule_requires_timezone_before_any_network_call(self):
         api = mock.Mock()

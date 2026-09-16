@@ -15,11 +15,11 @@ Flag each line that fails one of these, quoting it:
 2. **Unkept promise:** freebies "coming soon", perks, schedules the user can't confirm are live. Ask before keeping any.
 3. **Missing reader promise:** what a subscriber gets and how often.
 4. **Missing proof:** who writes it and why them, using only facts the user gave.
-5. **Voice:** breaks `../../references/voice-rules.md`.
+5. **Voice:** breaks `references/voice-rules.md`.
 
 ## Rewrite rules
 
-- Use only facts from the user, `~/.substack-skills/voice-profile.md`, or `~/.substack-skills/story-bank.md`. Follow `../../references/anti-fabrication.md`.
+- Use only facts from the user, `~/.substack-skills/voice-profile.md`, or `~/.substack-skills/story-bank.md`. Follow `references/anti-fabrication.md`.
 - No new perks, lead magnets, or credentials. If a slot would help, mark it: `[paid perk, if you offer one]`.
 - No dashes as connectors anywhere in the rewrite.
 

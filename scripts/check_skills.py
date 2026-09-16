@@ -1,10 +1,12 @@
 """Repo checks that don't need a model: run before every push and in CI.
 
-    python scripts/check_skills.py
+    python scripts/check_skills.py          # check
+    python scripts/check_skills.py --fix    # recopy references/ into the skills that use them, then check
 
 Fails on: wrong skill count, bad or missing frontmatter, name/folder mismatch, description over
-500 characters or containing dashes, broken relative references, any skill other than
-substack-publisher touching publishing internals or credentials, invalid plugin JSON.
+500 characters or containing dashes, a skill reaching outside its own folder (other agents copy
+skill folders one by one), a broken reference, a skill's copy of a shared reference drifting from
+references/, any skill other than substack-publisher touching credentials, invalid plugin JSON.
 """
 import json
 import re
@@ -15,7 +17,8 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_SKILLS = 11
 PUBLISHER = "substack-publisher"
 PUBLISHER_ONLY = ("publish.py", "COOKIES_STRING", "COOKIES_PATH", "connect.sid", "substack.sid", "from substack")
-REF = re.compile(r"`((?:\.\./\.\./references|scripts)/[\w./-]+)`")
+REF = re.compile(r"`((?:references|scripts)/[\w./-]+)`")
+SHARED = ROOT / "references"
 
 
 def frontmatter(text):
@@ -23,6 +26,14 @@ def frontmatter(text):
     if not m:
         return None
     return dict(line.split(": ", 1) for line in m.group(1).splitlines() if ": " in line)
+
+
+def sync_references():
+    """references/ is the master copy; each skill keeps its own copy of the files it cites."""
+    for copy in (ROOT / "skills").glob("*/references/*"):
+        master = SHARED / copy.name
+        if master.is_file():
+            copy.write_bytes(master.read_bytes())
 
 
 def check():
@@ -50,9 +61,15 @@ def check():
             errors.append(f"{folder.name}: description is {len(desc)} chars (max 500)")
         if re.search(r"[—–]| - ", desc):
             errors.append(f"{folder.name}: dash in description")
+        if "../" in text:
+            errors.append(f"{folder.name}: reaches outside its folder with ../ (breaks copied installs)")
         for ref in REF.findall(text):
             if not (folder / ref).exists():
                 errors.append(f"{folder.name}: broken reference {ref}")
+            copy, master = folder / ref, SHARED / Path(ref).name
+            drifted = copy.is_file() and master.is_file() and copy.read_bytes() != master.read_bytes()
+            if ref.startswith("references/") and drifted:
+                errors.append(f"{folder.name}: {ref} differs from references/ (run with --fix)")
         if folder.name != PUBLISHER:
             for needle in PUBLISHER_ONLY:
                 if needle in text:
@@ -72,6 +89,8 @@ def check():
 
 
 if __name__ == "__main__":
+    if "--fix" in sys.argv:
+        sync_references()
     problems = check()
     for p in problems:
         print("FAIL", p)

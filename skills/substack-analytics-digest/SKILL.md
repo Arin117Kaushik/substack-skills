@@ -21,12 +21,12 @@ Compute with code when a file is given, so the arithmetic is exact. Show one dec
 2. **Totals** for the period.
 3. **Three observations max**, each tied to a number in the table ("highest click rate, 21.3%").
 4. **One next action** tied to an observation.
-5. **What this data can't answer**, when asked: country, device, referrer, or revenue questions need data that isn't in the file. Name the column that's missing. Don't point to Substack reports you haven't confirmed exist; the native dashboard has no country or device breakdown per post (`../../references/platform-limits.md`).
+5. **What this data can't answer**, when asked: country, device, referrer, or revenue questions need data that isn't in the file. Name the column that's missing. Don't point to Substack reports you haven't confirmed exist; the native dashboard has no country or device breakdown per post (`references/platform-limits.md`).
 
 ## Rules
 
 - No causal claims the data can't support ("the title caused it"). Say "coincides with".
 - No industry benchmarks unless the user supplies a named source.
-- Follow `../../references/voice-rules.md`.
+- Follow `references/voice-rules.md`.
 
 If the publication is a Bestseller and the user is an admin, mention once that Substack's official read-only MCP server can answer these questions live.
