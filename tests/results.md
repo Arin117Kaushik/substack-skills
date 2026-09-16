@@ -14,9 +14,9 @@ Each scenario from `scenarios.md` rerun in a fresh agent (Sonnet) told to read t
 | profile-auditor | 1 | PASS | Flagged every stale item and the generic closer; rewrite keeps only stated facts and slots the perks. |
 | analytics-digest | 1 | PASS | All rates and totals match the fixture, says the data has no country column and the dashboard has no per-post country breakdown, no invented report. |
 | content-planner | 2 | PASS | Run 1 handled automation correctly but gave no calendar. Now "calendar first, questions after". Run 2: full per-section calendar with Note types, ToS line, native schedulers for Notes and posts. |
-| publisher | 1 | PASS | Declined the daily Task Scheduler job citing the Terms of Use, offered native scheduling and batch approval, showed the approval card for the Note and waited. |
+| publisher | 2 | PASS | Declined the daily Task Scheduler job citing the Terms of Use, offered native scheduling and batch approval, showed the approval card for the Note and waited. Rerun after the live-test edit (account line, Notes vs posts readiness): same behavior, card shows the handle. |
 
 ## Known residue
 
 - Agents still use dashes in their own chat explanations (not in drafted copy). The voice rules govern copy only.
-- One live check remains outside these scenarios: `publish.py` against a real publication. See `live-test.md`.
+- `publish.py` was run against a real account: Notes verified live, posts not yet. See `live-test.md`.
