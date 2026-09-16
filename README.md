@@ -2,6 +2,8 @@
 
 11 agent skills for writing on Substack, for Claude Code, Codex, Google Antigravity, OpenClaw, and any agent that reads SKILL.md folders: Notes, posts packaged for SEO, repurposing, a humanizer, an interviewer that builds your Story Bank, reply drafts, segment campaigns, About page audits, analytics recaps, content planning, and a publisher that posts and schedules only after you approve.
 
+Listed on [skills.sh](https://www.skills.sh/arin117kaushik/substack-skills).
+
 Every writing skill runs on two rules: nothing goes in a draft that you didn't say, and nothing goes out without your yes.
 
 ## Skills
