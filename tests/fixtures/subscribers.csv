@@ -1,0 +1,31 @@
+email,name,subscription_type,status,start_date,last_email_opened,country,tags
+asha0@example.com,Asha,paid,cancelled,2025-06-05,2026-07-21,India,
+ben1@example.com,Ben,free,active,2025-09-04,2026-06-19,India,
+chloe2@example.com,Chloe,free,active,2025-04-02,2026-02-14,Germany,
+dev3@example.com,Dev,paid,active,2025-04-03,2026-09-14,India,
+elena4@example.com,Elena,free,active,2025-02-08,2026-01-19,Canada,beta-reader
+farid5@example.com,Farid,free,active,2025-01-08,2026-01-18,United States,podcast-guest
+grace6@example.com,Grace,paid,cancelled,2025-07-05,2026-09-04,Canada,podcast-guest
+hiro7@example.com,Hiro,comp,active,2025-09-27,2026-03-04,Canada,
+isla8@example.com,Isla,free,active,2025-11-07,2026-06-04,Canada,
+jon9@example.com,Jon,paid,active,2025-10-02,2026-04-16,Canada,beta-reader
+kavya10@example.com,Kavya,free,active,2025-06-15,2026-08-12,United Kingdom,workshop-2025
+liam11@example.com,Liam,free,active,2025-03-23,2026-04-03,Canada,podcast-guest
+maya12@example.com,Maya,paid,cancelled,2025-09-16,2026-06-24,Germany,podcast-guest
+noah13@example.com,Noah,free,active,2025-10-03,2026-02-17,Germany,workshop-2025
+omar14@example.com,Omar,free,active,2025-06-05,2026-08-14,India,
+priya15@example.com,Priya,paid,active,2025-09-19,2026-06-11,United Kingdom,
+quinn16@example.com,Quinn,free,active,2025-08-19,2026-08-03,India,podcast-guest
+ravi17@example.com,Ravi,comp,active,2025-08-23,2026-02-02,United Kingdom,
+sara18@example.com,Sara,paid,cancelled,2025-11-27,2026-08-10,Germany,podcast-guest
+tom19@example.com,Tom,free,active,2025-01-15,2026-06-06,Canada,
+uma20@example.com,Uma,free,active,2025-08-02,2026-04-25,United Kingdom,workshop-2025
+vik21@example.com,Vik,paid,active,2025-12-08,2026-07-13,Germany,
+wen22@example.com,Wen,free,active,2025-03-15,2026-07-18,United Kingdom,workshop-2025
+xavi23@example.com,Xavi,free,active,2025-07-28,2026-09-09,Germany,podcast-guest
+yara24@example.com,Yara,paid,cancelled,2025-11-13,2026-04-05,India,workshop-2025
+zoe25@example.com,Zoe,free,active,2025-03-08,2026-04-01,Germany,
+arjun26@example.com,Arjun,free,active,2025-03-09,2026-05-01,United States,beta-reader
+bea27@example.com,Bea,paid,active,2025-09-12,2026-06-05,Canada,
+cal28@example.com,Cal,free,active,2025-11-22,2026-01-15,Canada,beta-reader
+dana29@example.com,Dana,free,active,2025-07-13,2026-07-04,Germany,beta-reader

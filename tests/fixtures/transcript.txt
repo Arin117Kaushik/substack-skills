@@ -1,0 +1,25 @@
+[Podcast: Side Door, episode 14. Host: Nina. Guest: the user.]
+
+NINA: So you left a design agency job and now you run operations with AI agents. What actually happened?
+
+GUEST: Honestly it was less brave than it sounds. The agency folded our team in August. I had about six weeks of savings. I started automating the boring parts of my own job search because I couldn't afford to waste hours on it.
+
+NINA: Like what?
+
+GUEST: Sourcing. I wrote a script that pulled job posts, scored them against what I actually wanted, and drafted a first note for each one. It cut my search from something like four hours a day to maybe forty minutes. The drafts were bad, but bad drafts are faster to fix than blank pages.
+
+NINA: Did it work?
+
+GUEST: It got me interviews, not offers, at first. The offers came when I stopped sending the drafts as-is. People can tell. The one thing I'd tell anyone is: automate the search, never automate the voice.
+
+NINA: That's a good line.
+
+GUEST: I stole the shape of it from my old creative director. She used to say "automate the invoice, never the idea."
+
+NINA: What's the Substack about, then?
+
+GUEST: It's the notebook of that switch. What I tried, what broke, what the tools really cost. Last month the stack cost me about eighteen dollars. People assume it's hundreds.
+
+NINA: Where do people find it?
+
+GUEST: Just search my name on Substack. I post Notes most days and one longer piece on Sundays.

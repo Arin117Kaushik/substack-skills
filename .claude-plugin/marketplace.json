@@ -1,0 +1,26 @@
+{
+  "name": "substack-skills",
+  "owner": {
+    "name": "Arin Kaushik",
+    "url": "https://github.com/Arin117Kaushik"
+  },
+  "metadata": {
+    "description": "Claude Code skills for writing, packaging, and publishing on Substack."
+  },
+  "plugins": [
+    {
+      "name": "substack-skills",
+      "source": "./",
+      "description": "11 Substack skills: Notes, posts with SEO packaging, repurposing, humanizer, interviewer, reply drafts, segment campaigns, profile audits, analytics recaps, content planning, and an approval-gated publisher.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Arin Kaushik",
+        "url": "https://github.com/Arin117Kaushik"
+      },
+      "homepage": "https://github.com/Arin117Kaushik/substack-skills",
+      "license": "MIT",
+      "keywords": ["substack", "newsletter", "notes", "writing", "claude-skills"],
+      "category": "productivity"
+    }
+  ]
+}

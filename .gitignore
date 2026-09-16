@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+*.local.md
+testing/
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+# real subscriber or stats exports; synthetic fixtures are allowed
+*.csv
+!tests/fixtures/*.csv
