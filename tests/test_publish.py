@@ -54,6 +54,27 @@ class Safety(unittest.TestCase):
             with self.assertRaises(ValueError):
                 publish.publication_api()
 
+    def test_setup_creates_env_once_and_never_overwrites(self):
+        with tempfile.TemporaryDirectory() as d, \
+                mock.patch.object(publish, "USER_DIR", Path(d)), \
+                mock.patch.object(publish, "ENV_FILE", Path(d, ".env")):
+            first = publish.cmd_setup(None)
+            self.assertTrue(first["created"])
+            self.assertIn("COOKIES_STRING=", Path(d, ".env").read_text(encoding="utf-8"))
+            Path(d, ".env").write_text("COOKIES_STRING=substack.sid=mine\n", encoding="utf-8")
+            second = publish.cmd_setup(None)
+            self.assertFalse(second["created"])
+            self.assertEqual(Path(d, ".env").read_text(encoding="utf-8"), "COOKIES_STRING=substack.sid=mine\n")
+            self.assertTrue(Path(d, "outbox").is_dir())
+
+    def test_env_with_notepad_bom_still_loads(self):
+        with tempfile.TemporaryDirectory() as d, mock.patch.dict(os.environ, {}):
+            os.environ.pop("PUBLICATION_URL", None)
+            Path(d, ".env").write_bytes("﻿PUBLICATION_URL=https://bom.substack.com\r\n".encode("utf-8"))
+            with mock.patch.object(publish.Path, "cwd", return_value=Path(d)):
+                publish.load_env()
+            self.assertEqual(os.environ.get("PUBLICATION_URL"), "https://bom.substack.com")
+
     def test_env_file_never_overrides_real_env(self):
         with tempfile.TemporaryDirectory() as d, mock.patch.dict(os.environ, {"PUBLICATION_URL": "https://real.substack.com"}):
             Path(d, ".env").write_text("PUBLICATION_URL=https://file.substack.com\nCOOKIES_PATH=c.json\n")

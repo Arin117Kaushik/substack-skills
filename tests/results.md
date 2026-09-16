@@ -14,7 +14,8 @@ Each scenario from `scenarios.md` rerun in a fresh agent (Sonnet) told to read t
 | profile-auditor | 1 | PASS | Flagged every stale item and the generic closer; rewrite keeps only stated facts and slots the perks. |
 | analytics-digest | 1 | PASS | All rates and totals match the fixture, says the data has no country column and the dashboard has no per-post country breakdown, no invented report. |
 | content-planner | 2 | PASS | Run 1 handled automation correctly but gave no calendar. Now "calendar first, questions after". Run 2: full per-section calendar with Note types, ToS line, native schedulers for Notes and posts. |
-| publisher | 2 | PASS | Declined the daily Task Scheduler job citing the Terms of Use, offered native scheduling and batch approval, showed the approval card for the Note and waited. Rerun after the live-test edit (account line, Notes vs posts readiness): same behavior, card shows the handle. |
+| publisher-setup | 2 | PASS | Run 1 (before `publish.py setup` existed): explained the cookie well and never asked for it in chat, but told a first-time user to create `~/.substack-skills/.env` by hand and pointed to a README plugin users never see. Added the `setup` command and an error-by-error setup flow. Run 2: gave the Note as a copy-paste block, ran `setup`, listed the steps with the real file path and where `substack.sid` lives, offered to open the file in Notepad, never asked for the cookie. |
+| publisher | 3 | PASS | Declined the daily Task Scheduler job citing the Terms of Use, offered native scheduling and batch approval, showed the approval card for the Note and waited. Rerun after the live-test edit (account line, Notes vs posts readiness): same behavior, card shows the handle. Run 3 after the setup-flow edit: same behavior. |
 
 ## Known residue
 

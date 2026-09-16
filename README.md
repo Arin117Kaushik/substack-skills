@@ -89,9 +89,11 @@ New Substack, live today.
 In Claude Code:
 
 ```
-/plugin marketplace add Arin117Kaushik/substack-skills
+/plugin marketplace add https://github.com/Arin117Kaushik/substack-skills.git
 /plugin install substack-skills@substack-skills
 ```
+
+Use the full HTTPS URL: the short `owner/repo` form clones over SSH and fails if you haven't set up GitHub SSH keys.
 
 Every skill except the publisher works right away with no setup.
 
@@ -108,8 +110,8 @@ Skills keep your data in `~/.substack-skills/`, outside the plugin folder (updat
 
 ## Publisher setup (optional)
 
-1. `pip install python-substack` (tested with 0.7.0)
-2. Copy `.env.example` to `~/.substack-skills/.env` and fill it in yourself. Notes need only `COOKIES_STRING` (your `substack.sid` cookie, see the file for where to find it). Posts also need `PUBLICATION_URL`. Don't paste cookies into a chat.
+1. `pip install python-substack==0.7.0` (`pip3` on macOS and Linux)
+2. Ask Claude to "set up my Substack publisher". It runs `publish.py setup`, which creates `~/.substack-skills/.env` with instructions inside. Open that file and paste in your `substack.sid` cookie yourself (sign in at substack.com, F12, Application tab, Storage > Cookies > https://substack.com). Notes need only that; posts also need `PUBLICATION_URL`. Don't paste cookies into a chat.
 3. Make every publish ask you first, whatever tries to run it. Add to `~/.claude/settings.json`:
 
    ```json

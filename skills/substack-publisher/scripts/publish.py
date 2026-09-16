@@ -1,5 +1,6 @@
 """Publish to Substack after the user approves. The only file in this bundle that talks to Substack.
 
+    python publish.py setup
     python publish.py check
     python publish.py post FILE.md --title "..." [--subtitle ..] [--audience everyone|only_paid|founding|only_free]
                       [--seo-title ..] [--seo-description ..] [--slug ..] [--section-id N] [--tags a,b]
@@ -27,16 +28,22 @@ SUBSTACK_API = "https://substack.com/api/v1"
 PAYWALL = "<!-- paywall -->"
 AUDIENCES = ("everyone", "only_paid", "founding", "only_free")
 BUNDLE_ROOT = Path(__file__).resolve().parents[3]
+USER_DIR = Path.home() / ".substack-skills"
+ENV_FILE = USER_DIR / ".env"
+LOADED_ENV = None  # which .env file load_env() used, reported by check
 _INLINE = re.compile(r"\*\*(.+?)\*\*|\*(.+?)\*|\[([^\]]+)\]\(([^)\s]+)\)")
 
 
 def load_env() -> None:
     """Minimal .env reader so the bundle needs no python-dotenv. Real env vars win."""
-    for folder in (Path.cwd(), Path.home() / ".substack-skills", BUNDLE_ROOT):
+    global LOADED_ENV
+    for folder in (Path.cwd(), USER_DIR, BUNDLE_ROOT):
         path = folder / ".env"
         if not path.is_file():
             continue
-        for line in path.read_text(encoding="utf-8").splitlines():
+        LOADED_ENV = str(path)
+        # utf-8-sig: Notepad can save a BOM that would otherwise glue itself to the first key
+        for line in path.read_text(encoding="utf-8-sig").splitlines():
             key, sep, value = line.partition("=")
             if sep and key.strip() and not key.lstrip().startswith("#"):
                 os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
@@ -83,7 +90,8 @@ def cookie_args() -> dict:
         return {"cookies_path": os.environ["COOKIES_PATH"]}
     if os.getenv("COOKIES_STRING"):
         return {"cookies_string": os.environ["COOKIES_STRING"]}
-    raise ValueError("Set COOKIES_STRING or COOKIES_PATH (see .env.example)")
+    raise ValueError(f"No Substack login found. Run `publish.py setup`, then paste your substack.sid cookie "
+                     f"into {ENV_FILE} (the file explains where to find it).")
 
 
 def profile_session():
@@ -113,6 +121,9 @@ def publication_api():
 
 
 def ok(response) -> dict:
+    if response.status_code == 401:
+        raise RuntimeError(f"Substack rejected the login (401). The substack.sid cookie in {LOADED_ENV or ENV_FILE} "
+                           "is wrong or expired: copy a fresh one from your browser.")
     if not 200 <= response.status_code < 300:
         raise RuntimeError(f"Substack returned {response.status_code}: {response.text[:300]}")
     return response.json() if response.content else {}
@@ -128,9 +139,25 @@ def cmd_check(session, args) -> dict:
     profile = ok(session.get(f"{SUBSTACK_API}/user/profile/self"))
     pubs = [Api.get_publication_url(pu["publication"])
             for pu in profile.get("publicationUsers") or [] if pu.get("publication")]
-    return {"ok": True, "handle": profile.get("handle"), "user_id": profile.get("id"),
+    return {"ok": True, "handle": profile.get("handle"), "user_id": profile.get("id"), "env_file": LOADED_ENV,
             "notes": "ready", "publications": pubs,
             "posts": "ready" if pubs else "needs a Substack publication"}
+
+
+def cmd_setup(args) -> dict:
+    """Create ~/.substack-skills/.env from the template. Never overwrites, never asks for the cookie."""
+    USER_DIR.mkdir(exist_ok=True)
+    (USER_DIR / "outbox").mkdir(exist_ok=True)
+    created = not ENV_FILE.exists()
+    if created:
+        ENV_FILE.write_text((BUNDLE_ROOT / ".env.example").read_text(encoding="utf-8"), encoding="utf-8")
+    return {"action": "setup", "env_file": str(ENV_FILE), "created": created, "next_steps": [
+        f"Open {ENV_FILE} in a text editor.",
+        "In your browser, sign in at substack.com, press F12, open the Application tab, "
+        "then Storage > Cookies > https://substack.com and copy the value of substack.sid.",
+        "Set the line COOKIES_STRING=substack.sid=<that value>, save the file.",
+        "For posts, also set PUBLICATION_URL=https://yourname.substack.com.",
+        "Run: publish.py check. Never paste the cookie into a chat."]}
 
 
 def cmd_post(api, args) -> dict:
@@ -146,7 +173,7 @@ def cmd_post(api, args) -> dict:
 
     from substack.post import Post
 
-    before, after = split_paywall(Path(args.file).read_text(encoding="utf-8"))
+    before, after = split_paywall(Path(args.file).expanduser().read_text(encoding="utf-8"))
     post = Post(title=args.title, subtitle=args.subtitle or "", user_id=api.get_user_id(), audience=args.audience)
     post.from_markdown(before, api=api)
     if after is not None:
@@ -178,7 +205,7 @@ def cmd_post(api, args) -> dict:
 
 def cmd_note(session, args) -> dict:
     # python-substack has no Notes call. Request shape matches substack-gateway-oss and substack-mcp.
-    payload = {"bodyJson": note_doc(Path(args.file).read_text(encoding="utf-8")),
+    payload = {"bodyJson": note_doc(Path(args.file).expanduser().read_text(encoding="utf-8")),
                "tabId": "for-you", "surface": "feed", "replyMinimumRole": "everyone"}
     if args.link:
         att = ok(session.post(f"{SUBSTACK_API}/comment/attachment", json={"url": args.link, "type": "link"}))
@@ -210,6 +237,7 @@ def redact(text: str) -> str:
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(description="Publish to Substack after approval.")
     sub = p.add_subparsers(dest="cmd", required=True)
+    sub.add_parser("setup")
     sub.add_parser("check")
     post = sub.add_parser("post")
     post.add_argument("file")
@@ -231,6 +259,9 @@ def main(argv=None) -> int:
         sub.add_parser(name).add_argument("id", type=int)
     args = p.parse_args(argv)
 
+    if args.cmd == "setup":
+        print(json.dumps(cmd_setup(args), indent=2))
+        return 0
     handlers = {"check": (profile_session, cmd_check), "note": (profile_session, cmd_note),
                 "delete-note": (profile_session, cmd_delete_note),
                 "post": (publication_api, cmd_post), "delete-post": (publication_api, cmd_delete_post)}
@@ -238,6 +269,9 @@ def main(argv=None) -> int:
         connect, handler = handlers[args.cmd]
         print(json.dumps(handler(connect(), args), indent=2))
         return 0
+    except ModuleNotFoundError as exc:
+        print(json.dumps({"ok": False, "error": f"{exc}. Install it with: pip install python-substack==0.7.0"}, indent=2))
+        return 1
     except Exception as exc:  # one exit path, always redacted
         print(json.dumps({"ok": False, "error": redact(f"{type(exc).__name__}: {exc}")}, indent=2))
         return 1

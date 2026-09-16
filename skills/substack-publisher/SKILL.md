@@ -42,10 +42,11 @@ If you don't know whether a post should email subscribers, ask. Don't default.
 
 ## Commands
 
-Write the approved text to `~/.substack-skills/outbox/<date>-<slug>.md`, then run from this skill's folder:
+Write the approved text to `~/.substack-skills/outbox/<date>-<slug>.md`. Run `publish.py` by its full path inside this skill's base directory, with `python` on Windows or `python3` on macOS and Linux:
 
 | Action | Command |
 |---|---|
+| First-time setup (creates the file only) | `python scripts/publish.py setup` |
 | Verify setup | `python scripts/publish.py check` |
 | Note | `python scripts/publish.py note FILE [--link POST_URL]` |
 | Post now | `python scripts/publish.py post FILE --title T --audience everyone [--subtitle S --seo-title T --seo-description D --slug S --tags a,b --section-id N] [--no-send]` |
@@ -56,9 +57,17 @@ Paywall: put `<!-- paywall -->` on its own line in the file. Report the JSON res
 
 ## Not set up yet
 
-`check` reports `notes` and `posts` readiness separately: Notes need only a Substack login, posts need a publication (`PUBLICATION_URL`). If `posts` isn't ready, say so and offer a copy-paste block for the post.
+`check` reports `notes` and `posts` readiness separately: Notes need only a Substack login, posts also need `PUBLICATION_URL`. If `posts` isn't ready, say so and offer a copy-paste block for the post.
 
-If `check` fails because python-substack or credentials are missing, deliver the approved text as a copy-paste block. Once per conversation, add: "To publish on approval: `pip install python-substack`, then create `~/.substack-skills/.env` with `COOKIES_STRING=substack.sid=...` (plus `PUBLICATION_URL=` for posts). See the README." Never repeat it after the user declines.
+When `check` fails, give the approved text as a copy-paste block so nothing is lost, then fix setup by error:
+
+- **"No Substack login found":** run `publish.py setup`. It creates `~/.substack-skills/.env` with instructions inside and never overwrites. Show its `next_steps` as a numbered list using the real `env_file` path, and offer to open the file for them (`notepad "<path>"` on Windows, `open -e "<path>"` on macOS). When they say it's done, run `check` again.
+- **"No module named 'substack'":** they run `pip install python-substack==0.7.0` (or `pip3`).
+- **"Substack rejected the login (401)":** the cookie is wrong or expired. They copy a fresh `substack.sid` value into the same file.
+
+The user pastes the cookie into the file themselves. If they paste a cookie or password into the chat instead, don't use it, write it anywhere, or repeat it: tell them to put it in the file, and that signing out of Substack in that browser should end that session.
+
+If the user never asked to publish, mention setup at most once per conversation, and never after they decline.
 
 ## Red flags: stop
 

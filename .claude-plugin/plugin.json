@@ -1,7 +1,7 @@
 {
   "name": "substack-skills",
   "description": "11 Claude Code skills for Substack writers: Notes, posts with SEO packaging, repurposing, humanizer, interviewer and Story Bank, reply drafts, segment campaigns, About page audits, analytics recaps, content planning, and an approval-gated publisher for posts and Notes.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": {
     "name": "Arin Kaushik",
     "url": "https://github.com/Arin117Kaushik"
