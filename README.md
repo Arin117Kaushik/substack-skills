@@ -97,7 +97,17 @@ Every skill works right away with no setup, except the publisher ([setup below](
 
 Use the full HTTPS URL: the short `owner/repo` form clones over SSH and fails if you haven't set up GitHub SSH keys.
 
-### Codex, OpenClaw, Antigravity, and other agents
+### Any agent, with the skills CLI
+
+The [skills CLI](https://www.skills.sh/) installs into Codex, Cursor, Antigravity, OpenClaw, Claude Code and many more, and asks which agents to set up:
+
+```
+npx skills add Arin117Kaushik/substack-skills
+```
+
+Needs Node.js. To install for specific agents without prompts: `npx skills add Arin117Kaushik/substack-skills --skill '*' -a codex -a cursor -y` (add `-g` for every project instead of just this one).
+
+### Codex, OpenClaw, Antigravity, and other agents (without Node.js)
 
 Clone once, then copy the skills into your agent's skills folder with the installer (Python 3, no dependencies):
 

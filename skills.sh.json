@@ -1,0 +1,20 @@
+{
+  "groupings": [
+    {
+      "title": "Write",
+      "description": "Draft Notes and posts from what you actually have, without invented facts.",
+      "skills": ["substack-notes-writer", "substack-post-writer", "substack-repurposer", "substack-humanizer", "substack-interviewer", "substack-reply-drafter"]
+    },
+    {
+      "title": "Grow",
+      "description": "Plan, audit your pages, read your stats, and reach subscriber segments privately.",
+      "skills": ["substack-content-planner", "substack-profile-auditor", "substack-analytics-digest", "substack-segment-campaigns"]
+    },
+    {
+      "title": "Publish",
+      "description": "Posts and Notes go live only after an approval card, never unattended.",
+      "skills": ["substack-publisher"]
+    }
+  ],
+  "notGrouped": "bottom"
+}
