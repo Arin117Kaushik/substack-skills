@@ -102,13 +102,13 @@ def profile_session():
 
 def publication_api():
     """python-substack client bound to a publication. Posts need one."""
-    from substack import Api
-
     args = cookie_args()
     url = os.getenv("PUBLICATION_URL", "")
     if not url or "substack.com/@" in url:
         raise ValueError("Posts need a publication URL like https://name.substack.com. "
                          "A profile page (substack.com/@handle) can publish Notes only.")
+    from substack import Api
+
     return Api(publication_url=url, **args)
 
 
@@ -134,8 +134,6 @@ def cmd_check(session, args) -> dict:
 
 
 def cmd_post(api, args) -> dict:
-    from substack.post import Post
-
     if args.audience not in AUDIENCES:
         raise ValueError(f"--audience must be one of {AUDIENCES}")
     when = None
@@ -145,6 +143,8 @@ def cmd_post(api, args) -> dict:
             raise ValueError("--at needs a timezone offset, e.g. 2026-09-20T08:00:00+05:30")
         if args.no_send:
             raise ValueError("--no-send only applies to publishing now, not scheduling")
+
+    from substack.post import Post
 
     before, after = split_paywall(Path(args.file).read_text(encoding="utf-8"))
     post = Post(title=args.title, subtitle=args.subtitle or "", user_id=api.get_user_id(), audience=args.audience)

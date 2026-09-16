@@ -17,4 +17,6 @@ jobs:
         with:
           python-version: "3.12"
       - run: python scripts/check_skills.py
+      - run: python -m pip install -r requirements.txt
+      - run: python -c "import importlib.util as u; s=u.spec_from_file_location('p','skills/substack-publisher/scripts/publish.py'); m=u.module_from_spec(s); s.loader.exec_module(m); from substack import Api; from substack.post import Post; assert hasattr(Api, 'publish_draft') and hasattr(Api, 'schedule_draft'); print('python-substack API OK')"
       - run: python -m unittest discover -s tests -v
