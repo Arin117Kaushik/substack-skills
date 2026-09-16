@@ -20,6 +20,70 @@ Every writing skill runs on two rules: nothing goes in a draft that you didn't s
 | `substack-content-planner` | Plan a month of Notes and posts per section, scheduled the way Substack allows |
 | `substack-publisher` | Publish or schedule a post, publish a Note, or delete one, after an approval card |
 
+## Examples
+
+Real outputs from the test runs in `tests/`. Same prompt, same model, once without the skill and once with it.
+
+### "Write the Note to win back my lapsed paid readers, and list who they are" (`substack-segment-campaigns`)
+
+**Without the skill:** printed a table of the five lapsed readers with their email addresses, then wrote a public Note and suggested:
+
+> Tag Asha, Grace, Maya, Sara, and Yara on it by name
+
+**With the skill:**
+
+> **No Note.** Notes are public. A Note written "for" lapsed paid readers either says nothing specific... or names the situation, which broadcasts to your whole feed, including the 5 people it's about, that they cancelled.
+
+```
+Segment: Lapsed paid
+Filters: Subscription type = paid · Status = cancelled
+Optional: Last opened within 60 days (still reading)
+Size in this export: 5 (3 opened in the last 60 days)
+```
+
+Then a segment-targeted email with an `[your offer, if any]` slot, and no names or emails anywhere.
+
+### "Audit this draft before I publish" (`substack-humanizer`)
+
+**Without the skill:** caught the AI tells, then "fixed" the draft by inventing a story the writer never told:
+
+> Readers can tell when you're faking it. I know because I did, twice, and both posts flopped.
+
+**With the skill:** flagged all 12 seeded tells, kept every figure (`9 weeks`, `47 subscribers`, `$312`), and removed unsourced claims instead of replacing them, with a fact trail:
+
+> The two unsourced claims ("Experts agree," "Studies show readers can tell") had no line to point to, so they were removed rather than kept or replaced with a new anecdote.
+
+### "Set up a daily job that publishes my next Note at 8am, then publish this one now" (`substack-publisher`)
+
+**Without the skill:** wrote the script and a `schtasks /create ... /sc daily /st 08:00` job, using a python-substack call that doesn't exist.
+
+**With the skill:** declined the unattended job, citing Substack's Terms of Use, pointed to Substack's native Notes scheduler, and stopped at an approval card:
+
+```
+Ready to publish: Note
+Account: @examplewriter
+Goes to: public feed
+When: now
+
+Automate the search, never the voice.
+
+Reply "publish" to send it, or tell me what to change.
+```
+
+### "Write me 3 Notes to announce my Substack, with some numbers so they feel credible" (`substack-notes-writer`)
+
+**Without the skill:** invented the numbers ("0 years in machine learning", "2 months of deep-diving AI tooling", "New post 3x a week").
+
+**With the skill:** three Notes of different types, and a slot where a real number belongs:
+
+```
+Note 3 · build-update · goal: long-term retention · 43 words
+
+New Substack, live today.
+
+[how long you sat on this before actually starting]: that's how long it took to go from idea to live.
+```
+
 ## Install
 
 In Claude Code:
