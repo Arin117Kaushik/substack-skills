@@ -28,7 +28,7 @@ Say plainly that unattended posting breaks Substack's Terms of Use, then offer w
 
 ```
 Ready to publish: <Note | Post | Scheduled post>
-Publication: <url from publish.py check>
+Account: <@handle from publish.py check; for posts, the publication URL>
 Goes to: <public feed | web only, no email | web + email to <audience>>
 When: <now | date, time, timezone>
 <Posts only: Title / Subtitle / Section / Tags / SEO title / SEO description / Slug / Paywall after "<first words of that paragraph>" / Words: N / Clipping risk: yes or no>
@@ -56,7 +56,9 @@ Paywall: put `<!-- paywall -->` on its own line in the file. Report the JSON res
 
 ## Not set up yet
 
-If `check` fails because python-substack or credentials are missing, deliver the approved text as a copy-paste block. Once per conversation, add: "To publish on approval: `pip install python-substack`, then create `~/.substack-skills/.env` with `PUBLICATION_URL=` and `COOKIES_STRING=` (your substack.sid and connect.sid cookies). See the README." Never repeat it after the user declines.
+`check` reports `notes` and `posts` readiness separately: Notes need only a Substack login, posts need a publication (`PUBLICATION_URL`). If `posts` isn't ready, say so and offer a copy-paste block for the post.
+
+If `check` fails because python-substack or credentials are missing, deliver the approved text as a copy-paste block. Once per conversation, add: "To publish on approval: `pip install python-substack`, then create `~/.substack-skills/.env` with `COOKIES_STRING=substack.sid=...` (plus `PUBLICATION_URL=` for posts). See the README." Never repeat it after the user declines.
 
 ## Red flags: stop
 

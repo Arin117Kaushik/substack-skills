@@ -45,16 +45,18 @@ Skills keep your data in `~/.substack-skills/`, outside the plugin folder (updat
 ## Publisher setup (optional)
 
 1. `pip install python-substack` (tested with 0.7.0)
-2. Copy `.env.example` to `~/.substack-skills/.env` and fill in `PUBLICATION_URL` and `COOKIES_STRING` yourself. Don't paste cookies into a chat.
+2. Copy `.env.example` to `~/.substack-skills/.env` and fill it in yourself. Notes need only `COOKIES_STRING` (your `substack.sid` cookie, see the file for where to find it). Posts also need `PUBLICATION_URL`. Don't paste cookies into a chat.
 3. Make every publish ask you first, whatever tries to run it. Add to `~/.claude/settings.json`:
 
    ```json
    { "permissions": { "ask": ["Bash(*publish.py *)", "PowerShell(*publish.py *)"] } }
    ```
 
-4. Ask Claude to "check my Substack publisher setup". It runs `publish.py check`, which reads nothing but your account and publication.
+4. Ask Claude to "check my Substack publisher setup". It runs `publish.py check`, which reads your profile and reports whether Notes and posts are ready.
 
 What it can do: publish a post now (with or without emailing subscribers), schedule a post, publish a Note (optionally with a link card), delete a post or Note. Every post runs Substack's own prepublish check first.
+
+**Verified live (2026-09-16):** setup check, Notes with formatting, Notes with a link card, Note deletion, and a failed login returning a clean error. **Not yet verified live:** posts (draft, publish, schedule, delete). They use python-substack's own documented calls and pass offline tests, but haven't run against a real publication. Reports welcome.
 
 ## Safety, plainly
 

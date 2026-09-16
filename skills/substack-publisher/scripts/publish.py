@@ -9,7 +9,8 @@
     python publish.py delete-note ID
 
 Credentials come from the environment or the first .env found in: current folder, ~/.substack-skills/, bundle root:
-PUBLICATION_URL plus COOKIES_STRING or COOKIES_PATH. Never pass them on the command line.
+COOKIES_STRING or COOKIES_PATH (always), plus PUBLICATION_URL for posts. Notes only need a Substack profile.
+Never pass credentials on the command line.
 Prints one JSON object. Exit code 1 on any failure, with cookie values redacted.
 """
 from __future__ import annotations
@@ -22,6 +23,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+SUBSTACK_API = "https://substack.com/api/v1"
 PAYWALL = "<!-- paywall -->"
 AUDIENCES = ("everyone", "only_paid", "founding", "only_free")
 BUNDLE_ROOT = Path(__file__).resolve().parents[3]
@@ -75,26 +77,60 @@ def split_paywall(markdown: str) -> tuple[str, str | None]:
     return before, (after if sep else None)
 
 
-def connect():
+def cookie_args() -> dict:
+    load_env()
+    if os.getenv("COOKIES_PATH"):
+        return {"cookies_path": os.environ["COOKIES_PATH"]}
+    if os.getenv("COOKIES_STRING"):
+        return {"cookies_string": os.environ["COOKIES_STRING"]}
+    raise ValueError("Set COOKIES_STRING or COOKIES_PATH (see .env.example)")
+
+
+def profile_session():
+    """Logged-in session on substack.com. Enough for Notes; no publication needed."""
+    import requests
     from substack import Api
 
-    load_env()
-    url = os.getenv("PUBLICATION_URL")
-    if not url:
-        raise ValueError("PUBLICATION_URL is not set (see .env.example)")
-    if os.getenv("COOKIES_PATH"):
-        return Api(cookies_path=os.environ["COOKIES_PATH"], publication_url=url)
-    if os.getenv("COOKIES_STRING"):
-        return Api(cookies_string=os.environ["COOKIES_STRING"], publication_url=url)
-    raise ValueError("Set COOKIES_STRING or COOKIES_PATH (see .env.example)")
+    args = cookie_args()
+    session = requests.Session()
+    if "cookies_path" in args:
+        session.cookies.update(json.loads(Path(args["cookies_path"]).read_text(encoding="utf-8")))
+    else:
+        session.cookies.update(Api._parse_cookies_string(args["cookies_string"]))
+    return session
+
+
+def publication_api():
+    """python-substack client bound to a publication. Posts need one."""
+    from substack import Api
+
+    args = cookie_args()
+    url = os.getenv("PUBLICATION_URL", "")
+    if not url or "substack.com/@" in url:
+        raise ValueError("Posts need a publication URL like https://name.substack.com. "
+                         "A profile page (substack.com/@handle) can publish Notes only.")
+    return Api(publication_url=url, **args)
+
+
+def ok(response) -> dict:
+    if not 200 <= response.status_code < 300:
+        raise RuntimeError(f"Substack returned {response.status_code}: {response.text[:300]}")
+    return response.json() if response.content else {}
 
 
 def site(api) -> str:
     return api.publication_url.rsplit("/api/v1", 1)[0]
 
 
-def cmd_check(api, args) -> dict:
-    return {"ok": True, "publication": site(api), "user_id": api.get_user_id()}
+def cmd_check(session, args) -> dict:
+    from substack import Api
+
+    profile = ok(session.get(f"{SUBSTACK_API}/user/profile/self"))
+    pubs = [Api.get_publication_url(pu["publication"])
+            for pu in profile.get("publicationUsers") or [] if pu.get("publication")]
+    return {"ok": True, "handle": profile.get("handle"), "user_id": profile.get("id"),
+            "notes": "ready", "publications": pubs,
+            "posts": "ready" if pubs else "needs a Substack publication"}
 
 
 def cmd_post(api, args) -> dict:
@@ -140,15 +176,14 @@ def cmd_post(api, args) -> dict:
             "url": published.get("canonical_url"), "warnings": check.get("suggestions") or [], **result}
 
 
-def cmd_note(api, args) -> dict:
-    # ponytail: uses python-substack's private _session because the library has no Notes call;
-    # swap for a public method if one ships. Request shape matches substack-gateway-oss and substack-mcp.
+def cmd_note(session, args) -> dict:
+    # python-substack has no Notes call. Request shape matches substack-gateway-oss and substack-mcp.
     payload = {"bodyJson": note_doc(Path(args.file).read_text(encoding="utf-8")),
                "tabId": "for-you", "surface": "feed", "replyMinimumRole": "everyone"}
     if args.link:
-        att = api._session.post(f"{api.publication_url}/comment/attachment", json={"url": args.link, "type": "link"})
-        payload["attachmentIds"] = [api._handle_response(att)["id"]]
-    note = api._handle_response(api._session.post(f"{api.publication_url}/comment/feed", json=payload))
+        att = ok(session.post(f"{SUBSTACK_API}/comment/attachment", json={"url": args.link, "type": "link"}))
+        payload["attachmentIds"] = [att["id"]]
+    note = ok(session.post(f"{SUBSTACK_API}/comment/feed", json=payload))
     return {"action": "note_published", "note_id": note.get("id")}
 
 
@@ -157,8 +192,8 @@ def cmd_delete_post(api, args) -> dict:
     return {"action": "post_deleted", "id": args.id}
 
 
-def cmd_delete_note(api, args) -> dict:
-    api._handle_response(api._session.delete(f"{api.publication_url}/comment/{args.id}"))
+def cmd_delete_note(session, args) -> dict:
+    ok(session.delete(f"{SUBSTACK_API}/comment/{args.id}"))
     return {"action": "note_deleted", "id": args.id}
 
 
@@ -169,7 +204,7 @@ def redact(text: str) -> str:
         value = pair.partition("=")[2].strip()
         if len(value) > 6:  # python-substack URL-decodes cookies, so hide both spellings
             text = text.replace(value, "[redacted]").replace(unquote(value), "[redacted]")
-    return re.sub(r"s(%3A|:)[A-Za-z0-9%._\-+/=]{12,}", "[redacted]", text)
+    return re.sub(r"s(%3A|:)(?!//)[A-Za-z0-9%._\-+/=]{12,}", "[redacted]", text)
 
 
 def main(argv=None) -> int:
@@ -196,10 +231,12 @@ def main(argv=None) -> int:
         sub.add_parser(name).add_argument("id", type=int)
     args = p.parse_args(argv)
 
-    handlers = {"check": cmd_check, "post": cmd_post, "note": cmd_note,
-                "delete-post": cmd_delete_post, "delete-note": cmd_delete_note}
+    handlers = {"check": (profile_session, cmd_check), "note": (profile_session, cmd_note),
+                "delete-note": (profile_session, cmd_delete_note),
+                "post": (publication_api, cmd_post), "delete-post": (publication_api, cmd_delete_post)}
     try:
-        print(json.dumps(handlers[args.cmd](connect(), args), indent=2))
+        connect, handler = handlers[args.cmd]
+        print(json.dumps(handler(connect(), args), indent=2))
         return 0
     except Exception as exc:  # one exit path, always redacted
         print(json.dumps({"ok": False, "error": redact(f"{type(exc).__name__}: {exc}")}, indent=2))

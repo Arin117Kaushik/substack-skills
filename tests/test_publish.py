@@ -44,6 +44,16 @@ class Safety(unittest.TestCase):
         self.assertNotIn("secretSecret", out)
         self.assertNotIn("abcdefghij", out)
 
+    def test_urls_are_not_redacted(self):
+        self.assertEqual(publish.redact("unavailable: https://substack.com/@someone"),
+                         "unavailable: https://substack.com/@someone")
+
+    def test_profile_url_rejected_for_posts_before_any_network_call(self):
+        env = {"PUBLICATION_URL": "https://substack.com/@someone", "COOKIES_STRING": "substack.sid=x"}
+        with mock.patch.dict(os.environ, env), mock.patch.object(publish, "load_env"):
+            with self.assertRaises(ValueError):
+                publish.publication_api()
+
     def test_env_file_never_overrides_real_env(self):
         with tempfile.TemporaryDirectory() as d, mock.patch.dict(os.environ, {"PUBLICATION_URL": "https://real.substack.com"}):
             Path(d, ".env").write_text("PUBLICATION_URL=https://file.substack.com\nCOOKIES_PATH=c.json\n")

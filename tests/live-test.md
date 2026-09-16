@@ -1,15 +1,18 @@
-# Live test: publish.py against a real publication
+# Live test: publish.py against a real account
 
-Run by hand on the maintainer's own publication. Every item is created, verified, then deleted. Nothing emails subscribers.
+Run on the maintainer's own Substack account on 2026-09-16. Everything created was verified, then deleted. Nothing emailed anyone.
 
 | # | Command | Expect | Result |
 |---|---|---|---|
-| 1 | `publish.py check` | publication URL and user id | pending |
-| 2 | `publish.py post live-post.md --title ... --draft --tags ... --seo-title ... --seo-description ... --slug ...` with a paywall marker | `draft_created`, metadata visible in the editor | pending |
-| 3 | `publish.py delete-post <draft id>` | `post_deleted` | pending |
-| 4 | `publish.py post live-post.md --title ... --no-send` | `published`, `emailed: false`, URL loads | pending |
-| 5 | `publish.py delete-post <id>` | post URL stops loading | pending |
-| 6 | `publish.py post live-post.md --title ... --at <tomorrow>` | `scheduled` | pending |
-| 7 | `publish.py delete-post <id>` | scheduled post gone | pending |
-| 8 | `publish.py note live-note.md --link <publication url>` | `note_published`, bold and italic render, link card shows | pending |
-| 9 | `publish.py delete-note <id>` | Note gone | pending |
+| 1 | `publish.py check` | handle, user id, Notes and posts readiness | PASS: returned handle, user id, publication list, `notes: ready` |
+| 2 | `publish.py note live-note.md` (bold, italic, two lines) | `note_published` | PASS: read back via `/reader/comment/{id}`: two paragraphs, `bold` and `italic` marks intact |
+| 3 | `publish.py delete-note <id>` | `note_deleted`, Note gone | PASS: read-back returns 404 |
+| 4 | `publish.py note live-note-link.md --link <profile url>` | `note_published` with a link card | PASS: one `link` attachment with the given URL |
+| 5 | `publish.py delete-note <id>` | Note gone | PASS: 404 |
+| 6 | `check` with a fake `COOKIES_STRING` | clean error, exit 1, no cookie in output | PASS: `401 Please sign in`, exit 1, no cookie echoed |
+| 7 | posts: `--draft`, publish `--no-send`, `--at`, `delete-post` | | NOT RUN: maintainer chose to ship posts unverified live. Offline tests cover argument validation and paywall splitting. |
+
+## Findings fixed during the run
+
+- The first `check` failed because `PUBLICATION_URL` held a profile URL (`substack.com/@handle`). `publish.py` required a publication for everything, so Notes now use a plain `substack.com` session and only posts need `PUBLICATION_URL`.
+- `redact()` masked part of a normal URL (`https://`) because `s://...` matched the cookie pattern. Fixed and covered by `test_urls_are_not_redacted`.

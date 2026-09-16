@@ -8,6 +8,7 @@ Verified facts the skills rely on. Each has a source and the date it was checked
 | Notes length | No published limit ("We dare you to try to figure out the character limit"). Working range 10-250 words by type, see `notes-taxonomy.md`. | [Notes FAQ](https://on.substack.com/p/notes-faq) | 2026-09-16 |
 | Notes scheduling | Native on web, iOS and Android since 8 April 2026. Scheduled Notes sit in the Notes Drafts tab. | [New on Substack, Apr 2026](https://on.substack.com/p/new-on-substack-post-templates-notes) | 2026-09-16 |
 | Post scheduling | Native in the web editor. `publish.py post --at` schedules too. | Substack editor; python-substack `schedule_draft` | 2026-09-16 |
+| Notes need no publication | A Substack login is enough to publish Notes. Posts need a publication. | Live test, `tests/live-test.md` | 2026-09-16 |
 | Notes are public | Notes go to the feed, not to inboxes, and can't target a segment. | [Notes launch post](https://on.substack.com/p/notes) | 2026-09-16 |
 | Targeted email | A post can be sent "only to a specific audience segment". The subscriber dashboard can email a filtered group directly without creating a post. | [Send to select subscribers](https://support.substack.com/hc/en-us/articles/19163529016212) | 2026-09-16 |
 | Segments | Saved filters on start date, activity, paid status, tags and more. | [Subscriber segments](https://support.substack.com/hc/en-us/articles/52113249525140) | 2026-09-16 |
