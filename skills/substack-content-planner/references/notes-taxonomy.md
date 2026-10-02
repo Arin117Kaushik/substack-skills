@@ -196,6 +196,8 @@ Next: {next_step}.
 | Specific number | "{N} {unit}. {result}." | build-update, micro-story |
 | Pulled quote | Single line lifted from long-form | repurpose-teaser |
 | Agree/disagree opener | "I {agree/disagree}, here's why:" | restack-commentary |
+| Benefit promise | "{Outcome} without {pain}: {N} things I changed." | list-format, micro-story |
+| Pain point | "Stuck on {struggle}? You're not alone." | question-prompt, list-format |
 
 ## CTA Patterns
 

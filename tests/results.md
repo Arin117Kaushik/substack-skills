@@ -34,3 +34,14 @@ Skills installed with `scripts/install.py` into a throwaway project's `.agents/s
 | humanizer scenario run from the copied folder | PASS: read only `references/` inside the copied skill folder, all seeded tells flagged, figures kept, nothing invented |
 | `publish.py check` from the copied folder | PASS against the maintainer's account, credentials read from `~/.substack-skills/.env` |
 
+
+## Starter kit additions (2026-10-02, GREEN)
+
+Reran the four new scenarios in fresh agents (Sonnet) told to read the edited skill first. Baselines are in `baselines.md`. Source: Write Build Scale's public Substack Starter Kit, 9 pages, paraphrased into `references/headline-formulas.md` and `references/positioning-and-homepage.md`. The kit's promo footer (three product ads) was left out on purpose.
+
+| Skill | Runs | Result | Notes |
+|---|---|---|---|
+| profile-auditor | 1 | PASS | Slotted topics, audience and outcome, refused to offer sample audiences, pointed to `substack-interviewer`, gave the positioning statement and where to reuse it, ordered homepage fixes without quoting menu paths, stated no frequency. |
+| post-writer (headlines) | 1 | PASS | Three options from named formulas (curiosity gap, data, how-to), 41 to 50 characters, one-line audits, only the user's 30 days and Tuesday finding, flagged that the post must say "what my 30 days showed" not a rule. |
+| notes-writer | 1 | PASS | Each Note labelled with an objective, no invented durations or results, one clearly marked slot Note plus three questions after. Residue: one unsourced claim in the pick line ("a direct question gets the most replies") and no word count on the slotted Note. |
+| content-planner | 1 | PASS | Baseline labelled as a convention, asked how many Notes the user can sustain, one fixed day, repurposing rows, consistency checklist, every angle `needs input`, native schedulers, no unattended automation. |

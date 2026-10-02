@@ -28,7 +28,7 @@ When a Note needs a specific you don't have, put a slot in the draft and ask:
 ## Output: one block per Note
 
 ```
-Note 1 · micro-story · goal: subscribers · 94 words
+Note 1 · micro-story · goal: subscribers · objective: personal · 94 words
 
 <the Note>
 
@@ -39,7 +39,10 @@ Then one line: which Note to post first and why. Then any questions.
 
 ## Rules for the Note itself
 
-- One idea. Hook in 10 words or fewer on line 1.
+- One idea and one objective, named in the label: educate, inspire, entertain, credibility, or personal. Mixing two blurs both.
+- Hook in 10 words or fewer on line 1. Never open with filler ("I've been thinking about", "I wanted to share"). Test it: read only line 1, would it stop a scroll?
+- Short words, short sentences, no filler. Read it aloud and cut what drags.
+- Skimmable: whitespace, a bullet list when there are 3 or more items, bold on one key phrase, at most 2 emojis, and only if they fit the voice profile.
 - Length inside the type's range in the taxonomy (hard ceiling 250 words).
 - A line break every 1 to 3 lines.
 - Close with a conversation prompt only this Note could ask, or nothing. Never "subscribe".
@@ -59,5 +62,6 @@ Drafting only. If the user wants a Note posted, hand the approved text to `subst
 |---|---|
 | Filling "credible numbers" with plausible ones | Slot and ask |
 | Replying with only questions | Notes first, questions after |
+| No stated objective, or two at once | Pick one and cut the rest |
 | Three Notes that are the same type | Vary the type unless the user asked for one |
 | Dash in the type label or body | Use the `·` label format above; commas in the body |

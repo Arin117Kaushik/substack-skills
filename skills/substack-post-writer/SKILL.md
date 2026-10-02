@@ -1,6 +1,6 @@
 ---
 name: substack-post-writer
-description: Use when the user wants a Substack newsletter post or long-form issue drafted from an idea or outline, or an existing draft packaged for publishing with title, subtitle, SEO title and description, slug, tags, section, and paywall placement. Not for short Notes (use substack-notes-writer) or reviewing tone (use substack-humanizer).
+description: Use when the user wants a Substack newsletter post or long-form issue drafted from an idea or outline, headline options for a post, or an existing draft packaged for publishing with title, subtitle, SEO title and description, slug, tags, section, and paywall placement. Not for short Notes (use substack-notes-writer) or reviewing tone (use substack-humanizer).
 ---
 
 # Substack Post Writer
@@ -9,7 +9,7 @@ Draft a post from what the user actually has, then package every field Substack 
 
 ## Before drafting
 
-1. Read `references/voice-rules.md`, `references/anti-fabrication.md`, `references/platform-limits.md`.
+1. Read `references/voice-rules.md`, `references/anti-fabrication.md`, `references/platform-limits.md`, `references/headline-formulas.md`.
 2. Read `~/.substack-skills/voice-profile.md` and `~/.substack-skills/story-bank.md` if they exist.
 
 ## Draft
@@ -19,7 +19,7 @@ Draft a post from what the user actually has, then package every field Substack 
 - Working length 1,000 to 2,500 words unless the user sets one.
 - **Clipping check:** Gmail clips emails over 102KB. If the user's target or past style is over about 6,000 words, or image-heavy, say so before drafting and offer: split into a series, cut, or accept that email readers see "View entire message".
 
-`--mode package` skips drafting and packages an existing draft.
+`--mode package` skips drafting and packages an existing draft. `--mode headlines`, or a request for headline options only, returns just the Headlines block below.
 
 ## Reply shape (always, in this order)
 
@@ -28,10 +28,14 @@ Draft a post from what the user actually has, then package every field Substack 
 3. The package block below, every field filled. Fields that depend on missing content get a best guess marked `(provisional)`.
 4. Up to 3 questions whose answers fill the most slots, or suggest `substack-interviewer --mode post`.
 
+## Headlines
+
+Give 3 options built from different formulas in `references/headline-formulas.md`. Each line: the headline, the formula name, character count (60 or fewer), and a one-line audit. Then name the pick and why. Use only the numbers and results the user gave: formulas 7 and 8 are off the table without them.
+
 ## Package
 
 ```
-Title: <60 characters or fewer, says what the reader gets>
+Title: <the pick from Headlines, 60 characters or fewer>
 Subtitle: <one sentence, adds what the title doesn't>
 SEO title: <keyword-first version of the title, 60 characters or fewer>
 SEO description: <150 to 160 characters, plain language, includes the main keyword>
@@ -58,4 +62,6 @@ Hand the draft and package to `substack-publisher` when the user wants it live. 
 | Replying with only questions | Skeleton, package, then questions |
 | Leaving out SEO, slug or tags because the user didn't ask | The package is always complete |
 | Ignoring a 9,000 word target | Warn about clipping first |
+| Nine unsorted headlines, no formula, no audit | Three options, formula named, audited |
+| "Proven", "guaranteed" or "data shows" with no user data | Pick a formula that doesn't claim it |
 | Inventing the cost, date or result in a section | Slot it |

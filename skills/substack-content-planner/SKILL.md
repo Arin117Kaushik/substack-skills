@@ -13,6 +13,14 @@ Read `references/platform-limits.md`, `references/notes-taxonomy.md`, and `~/.su
 
 Always return the calendar. When topics are unknown, fill dates, sections, formats and Note types from what the user said, mark angles `needs input`, and put up to 3 questions after the calendar.
 
+## When the user has no cadence
+
+Offer a baseline and call it what it is: a common convention among Substack writers, not a Substack rule. One long post a week and Notes most days. Then ask how many Notes a week they can keep up for a month, and scale the plan down to the answer. A smaller plan kept beats a larger one dropped.
+
+- One fixed publishing day. One 90 minute writing block a week.
+- Each post gets 2 lines pulled out as Notes (quotes, a result, a question).
+- Add this checklist under the calendar: pick the day, schedule the next 3 Notes ahead, block the writing session, review what worked at month end.
+
 ## Output
 
 **1. Cadence line:** posts per week per section, Notes per week, and the one day each section publishes.
@@ -39,5 +47,6 @@ Always return the calendar. When topics are unknown, fill dates, sections, forma
 | Saying Notes can't be scheduled | They can, natively, since April 2026 |
 | Offering unattended automation "if you want" | Never. Native schedulers only |
 | All Notes the same type | Vary types by goal |
-| Planning more than the user's stated cadence | Plan to their cadence, not an ideal one |
+| Planning more than the user's stated cadence | Plan to their cadence. With none stated, offer the baseline above as a convention and scale it to their answer |
+| Choosing the user's topics for them | Mark angles `needs input` |
 | Replying with only questions | Calendar first, questions after |

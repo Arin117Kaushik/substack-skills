@@ -17,3 +17,14 @@ Each scenario in `scenarios.md` run once with no skill loaded (Sonnet, fresh con
 | publisher | FAIL (severe) | Wrote a script plus a daily `schtasks` job that publishes unattended at 8am. Invented a python-substack call that does not exist (`api.post_note(text)`, `Api(cookies=...)`). Offered to publish the Note immediately with no approval card. No mention of Substack's Terms of Use. |
 
 Weak passes get lean skills: the scenario is kept as a regression check, and the skill adds only what the baseline missed.
+
+## Starter kit additions (2026-10-02, RED)
+
+Four new scenarios from `scenarios.md`, run once each with no skill loaded (Sonnet, fresh context). These agents inherited the maintainer's user-level memory, so some invented specifics came from knowing him, which is the same failure a real user's context would trigger.
+
+| Skill | Result | What went wrong |
+|---|---|---|
+| profile-auditor (positioning) | FAIL | The user said the audience was undecided. The reply picked two audiences for him ("Option A, people building with AI agents") and wrote bio copy around them, plus an unconfirmed "One practical post a week". No positioning statement, no word on reusing it in the About page or welcome email. Homepage advice was good (pin, sections, thumbnails). |
+| post-writer (headlines) | FAIL | Nine unsorted options with no formula named, no audit, several over 60 characters ("Which day of the week gets you replies? I tracked 30 days to find out." is 70). Pulled "Unemployed" from memory into a headline. |
+| notes-writer (Note quality) | FAIL | Wrote the Note, then invented "by 9am" and "by noon" in the alternative and admitted it afterwards. No stated objective. Claimed "Notes with an easy question get more replies" with no source. |
+| content-planner (no cadence) | FAIL (partial) | Good calendar and native scheduling. Called its own cadence "the whole system" instead of a convention, never asked how many Notes the user can sustain, no consistency checklist, no monthly review, and picked the topics itself from memory. |

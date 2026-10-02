@@ -11,15 +11,15 @@ Every writing skill runs on two rules: nothing goes in a draft that you didn't s
 | Skill | Use it when you want to |
 |---|---|
 | `substack-notes-writer` | Draft Notes from 8 types (micro-story, one-liner, contrarian-take, question-prompt, list-format, build-update, repurpose-teaser, restack-commentary), or pull the hook out of a Note you like |
-| `substack-post-writer` | Draft a post, then get title, subtitle, SEO title and description, slug, tags, section, paywall, and a Gmail clipping check |
+| `substack-post-writer` | Draft a post, get three audited headline options, then title, subtitle, SEO title and description, slug, tags, section, paywall, and a Gmail clipping check |
 | `substack-repurposer` | Turn a transcript, talk, or old post into Notes and a post outline, with quotes kept verbatim |
 | `substack-humanizer` | Strip AI tells from a draft without inventing experiences, or build your voice profile from past writing |
 | `substack-interviewer` | Get interviewed one question at a time so drafts have real material |
 | `substack-reply-drafter` | Draft replies to other writers' Notes and to your readers' comments (paste-only) |
 | `substack-segment-campaigns` | Turn a subscriber export into segments and win-back or welcome emails, without exposing anyone |
-| `substack-profile-auditor` | Fix a stale About page, publication description, or recommendation blurbs |
+| `substack-profile-auditor` | Fix a stale About page, bio, or publication description, build a positioning statement, tidy the homepage, and shape paid tier perks |
 | `substack-analytics-digest` | Get an exact recap of your post stats export |
-| `substack-content-planner` | Plan a month of Notes and posts per section, scheduled the way Substack allows |
+| `substack-content-planner` | Plan a month of Notes and posts per section, with a baseline cadence if you have none, scheduled the way Substack allows |
 | `substack-publisher` | Publish or schedule a post, publish a Note, or delete one, after an approval card |
 
 ## Examples
